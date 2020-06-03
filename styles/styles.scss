@@ -1,0 +1,104 @@
+$colors: #244F75, #60BFBF, #8C4B7E, #F8BB44, #F24B4B;
+$percentatge: (-100%, 0, 0), (0, 100%, 0), (0, -100%, 0), (0, 100%, 0), (100%, 0, 0);
+$font-family: 'Lato';
+
+* {
+    box-sizing: border-box;
+}  
+
+.stripe {
+    will-change: width, left, z-index, height;
+    position: absolute;
+    width: 20%;
+    min-height: 100vh;
+    overflow: hidden;
+    cursor: pointer;
+   
+    .stripeContent {
+        -webkit-animation-duration: 1s;
+                animation-duration: 1s;
+        -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+                animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+        -webkit-animation-fill-mode: both;
+                animation-fill-mode: both;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+
+        &:before{
+            content: "";
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0.05;
+            -webkit-transform-origin: center center;
+                    transform-origin: center center;
+            -webkit-transform: skew(30deg) scaleY(1) translate(0, 0);
+                    transform: skew(30deg) scaleY(1) translate(0, 0);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);           
+        }
+
+        &:hover:before{
+            -webkit-transform: skew(0deg) scale(3) translate(0, 0);
+            transform: skew(0deg) scale(3) translate(0, 0);
+            opacity: 0.1;
+        }
+
+        .stripeTitle {
+            font-family: $font-family;
+            font-weight: 300;
+            font-size: 3.5vw;
+            color: white;
+        }
+    }
+}
+
+@mixin keyframes-transform($name, $percentatge) {
+    @-webkit-keyframes #{$name} {
+        0% { 
+            -webkit-transform: translate3d($percentatge);
+                    transform: translate3d($percentatge); 
+        }
+        100% { 
+            -webkit-transform: translate3d(0, 0, 0);
+                    transform: translate3d(0, 0, 0); 
+        }
+    }
+    @keyframes #{$name} {
+        0% { 
+            -webkit-transform: translate3d($percentatge);
+                    transform: translate3d($percentatge); 
+        }
+        100% { 
+            -webkit-transform: translate3d(0, 0, 0);
+                    transform: translate3d(0, 0, 0); 
+        }
+    }
+}
+
+@for $i from 1 through 5 {
+    .stripe:nth-child(#{$i}) {
+      left: ($i - 1) * 20vw;
+
+      .stripeContent{
+          background-color: nth($colors, $i);
+          @include keyframes-transform('stripe' + $i, nth($percentatge, $i));
+          $delay: $i / 10;
+          -webkit-animation-name: 'stripe' + $i;
+                  animation-name: 'stripe' + $i;
+          -webkit-animation-delay: $delay + s;
+                  animation-delay: $delay + s;
+      }
+    }   
+}
+
